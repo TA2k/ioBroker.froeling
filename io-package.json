@@ -1,0 +1,116 @@
+{
+    "common": {
+        "name": "froeling",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Fröling Connect",
+        "titleLang": {
+            "en": "Fröling Connect",
+            "de": "Fröling Connect",
+            "ru": "Fröling Connect",
+            "pt": "Fröling Connect",
+            "nl": "Fröling Connect",
+            "fr": "Fröling Connect",
+            "it": "Fröling Connect",
+            "es": "Fröling Connect",
+            "pl": "Fröling Connect",
+            "zh-cn": "弗洛林连接"
+        },
+        "desc": {
+            "en": "Adapter for Fröling Connect",
+            "de": "Adapter für Fröling Connect",
+            "ru": "Адаптер для Fröling Connect",
+            "pt": "Adaptador para Fröling Connect",
+            "nl": "Adapter voor Fröling Connect",
+            "fr": "Adaptateur pour Fröling Connect",
+            "it": "Adattatore per Fröling Connect",
+            "es": "Adaptador para Fröling Connect",
+            "pl": "Adapter do Fröling Connect",
+            "zh-cn": "Fröling Connect 适配器"
+        },
+        "authors": [
+            "TA2k <tombox2020@gmail.com>"
+        ],
+        "keywords": [
+            "fröling connect",
+            "fröling"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "froeling.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.froeling/master/admin/froeling.png",
+        "readme": "https://github.com/TA2k/ioBroker.froeling/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "climate-control",
+        "compact": true,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "materialize": true,
+        "plugins": {
+            "sentry": {
+                "dsn": "https://c9bd6c851b1246da95e6e982aa9b88f3@sentry.iobroker.net/152"
+            }
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=3.0.0"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=4.0.9"
+            }
+        ]
+    },
+    "encryptedNative": [
+        "password"
+    ],
+    "protectedNative": [
+        "password"
+    ],
+    "native": {
+        "username": "",
+        "password": "",
+        "interval": 10
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
