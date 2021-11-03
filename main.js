@@ -77,7 +77,7 @@ class Froeling extends utils.Adapter {
             .then((res) => {
                 this.log.debug(JSON.stringify(res.data));
                 this.session = res.data;
-                this.token = res.headers["Authorization"];
+                this.token = res.headers["authorization"];
                 this.setState("info.connection", true, true);
             })
             .catch((error) => {
@@ -103,7 +103,7 @@ class Froeling extends utils.Adapter {
             })
                 .then(async (res) => {
                     this.log.debug(JSON.stringify(res.data));
-
+                    this.log.info(`${res.data.length} devices found`);
                     for (const device of res.data) {
                         this.deviceArray.push(device.id);
                         const id = device.id;
