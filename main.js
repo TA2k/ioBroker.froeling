@@ -123,13 +123,6 @@ class Froeling extends utils.Adapter {
                         //     },
                         //     native: {},
                         // });
-                        await this.setObjectNotExistsAsync(id + ".general", {
-                            type: "channel",
-                            common: {
-                                name: "General Information",
-                            },
-                            native: {},
-                        });
 
                         const remoteArray = [];
                         remoteArray.forEach((remote) => {
@@ -145,7 +138,7 @@ class Froeling extends utils.Adapter {
                                 native: {},
                             });
                         });
-                        this.json2iob.parse(id + ".general", device);
+                        this.json2iob.parse(id, device);
                     }
                 })
                 .catch((error) => {
