@@ -183,6 +183,16 @@ class Froeling extends utils.Adapter {
                 url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getFacilityDetails/$id",
                 desc: "Detailed status of the device",
             },
+            {
+                path: "kessel",
+                url: "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/$id/component/1_100",
+                desc: "Detailed status of the Kessel",
+            },
+            {
+                path: "errors",
+                url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getErrors/$id",
+                desc: "Errors of the device",
+            },
         ];
 
         const headers = {
