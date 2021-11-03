@@ -139,6 +139,34 @@ class Froeling extends utils.Adapter {
                             });
                         });
                         this.json2iob.parse(id, device);
+                        await this.requestClient({
+                            method: "get",
+                            url: "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/" + id + "/componentList",
+                            headers: {
+                                Connection: "keep-alive",
+                                Accept: "*/*",
+                                "User-Agent": "Froeling PROD/2107.1 (com.froeling.connect-ios; build:2107.1.01; iOS 14.8.0) Alamofire/4.8.1",
+                                "Accept-Language": "de",
+                                Authorization: this.token,
+                            },
+                        })
+                            .then(async (res) => {
+                                this.log.debug(JSON.stringify(res.data));
+
+                                await this.setObjectNotExistsAsync(id + ".componentList", {
+                                    type: "device",
+                                    common: {
+                                        name: "Component List",
+                                    },
+                                    native: {},
+                                });
+
+                                this.json2iob.parse(id + ".componentList", res.data, { preferedArrayName: "displayName" });
+                            })
+                            .catch((error) => {
+                                this.log.error(error);
+                                error.response && this.log.error(JSON.stringify(error.response.data));
+                            });
                     }
                 })
                 .catch((error) => {
@@ -149,7 +177,13 @@ class Froeling extends utils.Adapter {
     }
 
     async updateDevices() {
-        const statusArray = [];
+        const statusArray = [
+            {
+                path: "details",
+                url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getFacilityDetails/$id",
+                desc: "Detailed status of the device",
+            },
+        ];
 
         const headers = {
             Connection: "keep-alive",
@@ -175,7 +209,7 @@ class Froeling extends utils.Adapter {
                         const data = res.data;
 
                         const forceIndex = null;
-                        const preferedArrayName = null;
+                        const preferedArrayName = "label";
 
                         this.json2iob.parse(id + "." + element.path, data, { forceIndex: forceIndex, preferedArrayName: preferedArrayName, channelName: element.desc });
                     })
