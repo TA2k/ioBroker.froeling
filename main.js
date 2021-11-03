@@ -105,8 +105,9 @@ class Froeling extends utils.Adapter {
                     this.log.debug(JSON.stringify(res.data));
                     this.log.info(`${res.data.length} devices found`);
                     for (const device of res.data) {
-                        this.deviceArray.push(device.id);
-                        const id = device.id;
+                        const id = device.id.toString();
+
+                        this.deviceArray.push(id);
                         const name = device.name;
                         await this.setObjectNotExistsAsync(id, {
                             type: "device",
