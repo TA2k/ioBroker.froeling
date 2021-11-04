@@ -184,9 +184,9 @@ class Froeling extends utils.Adapter {
                 desc: "Detailed status of the device",
             },
             {
-                path: "kessel",
+                path: "1_100",
                 url: "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/$id/component/1_100",
-                desc: "Detailed status of the Kessel",
+                desc: "Detailed status of device 1_100",
             },
             {
                 path: "errors",
@@ -221,7 +221,7 @@ class Froeling extends utils.Adapter {
                         const forceIndex = null;
                         const preferedArrayName = "label";
 
-                        this.json2iob.parse(id + "." + element.path, data, { forceIndex: forceIndex, preferedArrayName: preferedArrayName, channelName: element.desc });
+                        this.json2iob.parse(id + "." + element.path, data, { forceIndex: forceIndex, preferedArrayName: preferedArrayName, autoCast: true, channelName: element.desc });
                     })
                     .catch((error) => {
                         if (error.response) {
@@ -270,8 +270,49 @@ class Froeling extends utils.Adapter {
     async onStateChange(id, state) {
         if (state) {
             if (!state.ack) {
+                if (id.indexOf(".setValue") === -1) {
+                    this.log.info("please use setValue Object to set values");
+                    return;
+                }
                 const deviceId = id.split(".")[2];
-                const path = id.split(".")[4];
+                const parentPath = id.split(".").slice(1, -1).slice(1).join(".");
+
+                const paramIdState = await this.getStateAsync(parentPath + ".paramId");
+                const menuTypeState = await this.getStateAsync(parentPath + ".menuType");
+
+                if (!paramIdState || !paramIdState.val) {
+                    this.log.info("No paramIdState found");
+                    return;
+                }
+                if (!menuTypeState || !menuTypeState.val) {
+                    this.log.info("No menuType found");
+                    return;
+                }
+                const data = { paramId: paramIdState.val, menuType: menuTypeState.val, value: state.val };
+                this.log.debug(JSON.stringify(data));
+                await this.requestClient({
+                    method: "put",
+                    url: "https://connect-api.froeling.com/app/v1.0/resources/facility/setParam/" + deviceId,
+                    headers: {
+                        "Content-Type": "application/json; charset=UTF-8",
+                        Accept: "*/*",
+                        Connection: "keep-alive",
+                        "User-Agent": "Froeling PROD/2107.1 (com.froeling.connect-ios; build:2107.1.01; iOS 14.8.0) Alamofire/4.8.1",
+                        "Accept-Language": "de",
+                        Authorization: this.token,
+                    },
+                    data: data,
+                })
+                    .then((res) => {
+                        this.log.info(JSON.stringify(res.data));
+                        return res.data;
+                    })
+                    .catch((error) => {
+                        this.log.error(error);
+                        if (error.response) {
+                            this.log.error(JSON.stringify(error.response.data));
+                        }
+                    });
 
                 this.refreshTimeout && clearTimeout(this.refreshTimeout);
                 this.refreshTimeout = setTimeout(async () => {

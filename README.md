@@ -22,6 +22,8 @@ Die fröling connect Mail und Passwort eingeben.
 
 ## Steuern
 
+Parameter können geändert werden in dem der "setValue" State beschrieben wird.
+
 ## Diskussion und Fragen
 
 <https://forum.iobroker.net/topic/49051/test-fröling-connect-v0-0-x>
