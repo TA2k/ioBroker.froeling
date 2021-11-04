@@ -219,7 +219,10 @@ class Froeling extends utils.Adapter {
                         const data = res.data;
 
                         const forceIndex = null;
-                        const preferedArrayName = "label";
+                        let preferedArrayName = "label";
+                        if (element.path === "details") {
+                            preferedArrayName = "name+parameter/paramId";
+                        }
 
                         this.json2iob.parse(id + "." + element.path, data, { forceIndex: forceIndex, preferedArrayName: preferedArrayName, autoCast: true, channelName: element.desc });
                     })
