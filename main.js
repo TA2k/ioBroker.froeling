@@ -189,6 +189,11 @@ class Froeling extends utils.Adapter {
                 desc: "Detailed status of device 1_100",
             },
             {
+                path: "300_3100",
+                url: "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/$id/component/300_3100",
+                desc: "Detailed status of device 300_3100",
+            },
+            {
                 path: "errors",
                 url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getErrors/$id",
                 desc: "Errors of the device",
