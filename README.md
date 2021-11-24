@@ -30,6 +30,10 @@ Parameter können geändert werden in dem der "setValue" State beschrieben wird.
 
 ## Changelog
 
+### 0.0.3
+
+* (garfield2412) added Querries for more Details of other Devices
+
 ### 0.0.2
 
 * (TA2k) initial release
