@@ -23,6 +23,7 @@ class Froeling extends utils.Adapter {
         this.on("stateChange", this.onStateChange.bind(this));
         this.on("unload", this.onUnload.bind(this));
         this.deviceArray = [];
+        this.componentsArray = {};
         this.json2iob = new Json2iob(this);
         this.requestClient = axios.create();
         this.updateInterval = null;
@@ -152,11 +153,16 @@ class Froeling extends utils.Adapter {
                         })
                             .then(async (res) => {
                                 this.log.debug(JSON.stringify(res.data));
-
+                                this.log.info(`${res.data.length} components found`);
+                                let componentArray = [];
+                                for (const component of res.data) {
+                                    componentArray.push({ id: component.componentId, name: component.displayName });
+                                }
+                                this.componentsArray[id] = componentArray;
                                 await this.setObjectNotExistsAsync(id + ".componentList", {
                                     type: "device",
                                     common: {
-                                        name: "Component List",
+                                        name: "Component list to change component states",
                                     },
                                     native: {},
                                 });
@@ -181,13 +187,9 @@ class Froeling extends utils.Adapter {
             {
                 path: "details",
                 url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getFacilityDetails/$id",
-                desc: "Detailed status of the device",
+                desc: "Detailed status of the devices and to change the state of the devices",
             },
-            {
-                path: "1_100",
-                url: "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/$id/component/1_100",
-                desc: "Detailed status of device 1_100",
-            },
+
             {
                 path: "errors",
                 url: "https://connect-api.froeling.com/app/v1.0/resources/facility/getErrors/$id",
@@ -244,6 +246,47 @@ class Froeling extends utils.Adapter {
                         error.response && this.log.error(JSON.stringify(error.response.data));
                     });
             });
+
+            for (const component of this.componentsArray[id]) {
+                const url = "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/" + id + "/component/" + component.id;
+                await this.requestClient({
+                    method: "get",
+                    url: url,
+                    headers: headers,
+                })
+                    .then((res) => {
+                        this.log.debug(JSON.stringify(res.data));
+                        if (!res.data) {
+                            return;
+                        }
+                        const data = res.data;
+                        const forceIndex = null;
+                        let preferedArrayName = "label";
+                        this.json2iob.parse(id + ".componentList." + component.name, data, {
+                            forceIndex: forceIndex,
+                            preferedArrayName: preferedArrayName,
+                            autoCast: true,
+                            channelName: "Component " + component.name,
+                        });
+                    })
+                    .catch((error) => {
+                        if (error.response) {
+                            if (error.response.status === 401) {
+                                error.response && this.log.debug(JSON.stringify(error.response.data));
+                                this.log.info(element.path + " receive 401 error. Refresh Token in 5min");
+                                this.refreshTokenTimeout && clearTimeout(this.refreshTokenTimeout);
+                                this.refreshTokenTimeout = setTimeout(() => {
+                                    this.login();
+                                }, 1000 * 60 * 5);
+
+                                return;
+                            }
+                        }
+                        this.log.error(url);
+                        this.log.error(error);
+                        error.response && this.log.error(JSON.stringify(error.response.data));
+                    });
+            }
         });
     }
 
@@ -282,20 +325,25 @@ class Froeling extends utils.Adapter {
 
                 const paramIdState = await this.getStateAsync(parentPath + ".paramId");
                 const menuTypeState = await this.getStateAsync(parentPath + ".menuType");
+                const idState = await this.getStateAsync(parentPath + ".id");
+                if (!paramIdState && !menuTypeState && !idState) {
+                    this.log.error("missing id states");
+                    return;
+                }
 
-                if (!paramIdState || !paramIdState.val) {
-                    this.log.info("No paramIdState found");
-                    return;
+                let url = "";
+                let data = {};
+                if (idState) {
+                    data = { value: state.val };
+                    url = "https://connect-api.froeling.com/fcs/v1.0/resources/user/" + this.session.userId + "/facility/" + deviceId + "/parameter/" + idState.val;
+                } else {
+                    url = "https://connect-api.froeling.com/app/v1.0/resources/facility/setParam/" + deviceId;
+                    data = { paramId: paramIdState.val, menuType: menuTypeState.val, value: state.val };
                 }
-                if (!menuTypeState || !menuTypeState.val) {
-                    this.log.info("No menuType found");
-                    return;
-                }
-                const data = { paramId: paramIdState.val, menuType: menuTypeState.val, value: state.val };
                 this.log.debug(JSON.stringify(data));
                 await this.requestClient({
                     method: "put",
-                    url: "https://connect-api.froeling.com/app/v1.0/resources/facility/setParam/" + deviceId,
+                    url: url,
                     headers: {
                         "Content-Type": "application/json; charset=UTF-8",
                         Accept: "*/*",
@@ -311,6 +359,10 @@ class Froeling extends utils.Adapter {
                         return res.data;
                     })
                     .catch((error) => {
+                        if (error.response && error.response.status === 304) {
+                            this.log.info("Value not changed");
+                            return;
+                        }
                         this.log.error(error);
                         if (error.response) {
                             this.log.error(JSON.stringify(error.response.data));

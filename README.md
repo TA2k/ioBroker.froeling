@@ -30,7 +30,7 @@ Parameter können geändert werden in dem der "setValue" State beschrieben wird.
 
 ## Changelog
 
-### 0.0.2
+### 0.0.3
 
 * (TA2k) initial release
 
