@@ -156,7 +156,7 @@ class Froeling extends utils.Adapter {
                                 this.log.info(`${res.data.length} components found`);
                                 let componentArray = [];
                                 for (const component of res.data) {
-                                    componentArray.push({ id: component.componentId, name: component.displayName });
+                                    componentArray.push({ id: component.componentId, name: component.displayName + "-" + component.displayCategory });
                                 }
                                 this.componentsArray[id] = componentArray;
                                 await this.setObjectNotExistsAsync(id + ".componentList", {
@@ -167,7 +167,7 @@ class Froeling extends utils.Adapter {
                                     native: {},
                                 });
 
-                                this.json2iob.parse(id + ".componentList", res.data, { preferedArrayName: "displayName" });
+                                this.json2iob.parse(id + ".componentList", res.data, { preferedArrayName: "displayName+displayCategory" });
                             })
                             .catch((error) => {
                                 this.log.error(error);
