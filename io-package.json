@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "froeling",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "news": {
+            "0.0.4": {
+                "en": "New Componentlist structure, please adjust vis and scripts",
+                "de": "Neue Componentlist struktur, bitte Vis und Skripte anpassen",
+                "ru": "Новая структура списка компонентов, пожалуйста, настройте визу и скрипты.",
+                "pt": "Nova estrutura da lista de componentes, ajuste vis e scripts",
+                "nl": "Nieuwe componentenlijststructuur, pas vis en scripts aan",
+                "fr": "Nouvelle structure de liste de composants, veuillez ajuster les vis et les scripts",
+                "it": "Nuova struttura dell'elenco dei componenti, regola vis e script",
+                "es": "Nueva estructura de lista de componentes, ajuste vis y scripts",
+                "pl": "Nowa struktura listy komponentów, proszę dostosować widok i skrypty",
+                "zh-cn": "新的 Componentlist 结构，请调整 vis 和 scripts"
+            },
             "0.0.3": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",

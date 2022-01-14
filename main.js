@@ -88,6 +88,25 @@ class Froeling extends utils.Adapter {
                 }
             });
     }
+    async cleanOldVersion(id) {
+        const cleanOldVersion = await this.getObjectAsync("oldVersionCleaned");
+        if (!cleanOldVersion) {
+            this.log.info("Clean old version component list");
+            await this.delObjectAsync(id + ".componentList", { recursive: true });
+            await this.setObjectNotExistsAsync("oldVersionCleaned", {
+                type: "state",
+                common: {
+                    type: "boolean",
+                    role: "boolean",
+                    write: false,
+                    read: true,
+                },
+                native: {},
+            });
+
+            this.log.info("Done with cleaning");
+        }
+    }
     async getDeviceList() {
         const urlArray = ["https://connect-api.froeling.com/app/v1.0/resources/user/getFacilities", "https://connect-api.froeling.com/app/v1.0/resources/user/getServiceFacilities"];
         for (const url of urlArray) {
@@ -109,6 +128,7 @@ class Froeling extends utils.Adapter {
                         const id = device.id.toString();
 
                         this.deviceArray.push(id);
+                        await this.cleanOldVersion(id);
                         const name = device.name;
                         await this.setObjectNotExistsAsync(id, {
                             type: "device",
@@ -156,7 +176,7 @@ class Froeling extends utils.Adapter {
                                 this.log.info(`${res.data.length} components found`);
                                 let componentArray = [];
                                 for (const component of res.data) {
-                                    componentArray.push({ id: component.componentId, name: component.displayName + "-" + component.displayCategory });
+                                    componentArray.push({ id: component.componentId, name: component.displayName.replace(/\./g, "").replace(/\ /g, "") + "-" + component.displayCategory });
                                 }
                                 this.componentsArray[id] = componentArray;
                                 await this.setObjectNotExistsAsync(id + ".componentList", {
