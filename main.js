@@ -7,7 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const axios = require("axios");
+const axios = require("axios").default;
 const Json2iob = require("./lib/json2iob");
 
 class Froeling extends utils.Adapter {
@@ -178,7 +178,7 @@ class Froeling extends utils.Adapter {
               .then(async (res) => {
                 this.log.debug(JSON.stringify(res.data));
                 this.log.info(`${res.data.length} components found`);
-                let componentArray = [];
+                const componentArray = [];
                 for (const component of res.data) {
                   componentArray.push({
                     id: component.componentId,
@@ -319,7 +319,7 @@ class Froeling extends utils.Adapter {
             }
             const data = res.data;
             const forceIndex = null;
-            let preferedArrayName = "label";
+            const preferedArrayName = "label";
             this.json2iob.parse(id + ".componentList." + component.name, data, {
               forceIndex: forceIndex,
               preferedArrayName: preferedArrayName,
@@ -331,7 +331,7 @@ class Froeling extends utils.Adapter {
             if (error.response) {
               if (error.response.status === 401) {
                 error.response && this.log.debug(JSON.stringify(error.response.data));
-                this.log.info(element.path + " receive 401 error. Refresh Token in 5min");
+                this.log.info(url + " receive 401 error. Refresh Token in 5min");
                 this.refreshTokenTimeout && clearTimeout(this.refreshTokenTimeout);
                 this.refreshTokenTimeout = setTimeout(() => {
                   this.login();
