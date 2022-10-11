@@ -74,7 +74,7 @@
     "materialize": true,
     "plugins": {
       "sentry": {
-        "dsn": "https://c9bd6c851b1246da95e6e982aa9b88f3@sentry.iobroker.net/152"
+        "dsn": "https://0e0a53053f614c01a9cc343d6941704d@sentry.iobroker.net/211"
       }
     },
     "dependencies": [
