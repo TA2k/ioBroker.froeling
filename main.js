@@ -56,6 +56,9 @@ class Froeling extends utils.Adapter {
       this.refreshTokenInterval = setInterval(() => {
         this.login();
       }, 11.5 * 60 * 60 * 1000);
+      this.deviceListInterval = setInterval(() => {
+        this.getDeviceList();
+      }, 12 * 60 * 60 * 1000);
     }
   }
   async login() {
@@ -127,6 +130,7 @@ class Froeling extends utils.Adapter {
         .then(async (res) => {
           this.log.debug(JSON.stringify(res.data));
           this.log.info(`${res.data.length} devices found`);
+          this.deviceArray = [];
           for (const device of res.data) {
             const id = device.id.toString();
 
@@ -360,6 +364,7 @@ class Froeling extends utils.Adapter {
       this.refreshTokenTimeout && clearTimeout(this.refreshTokenTimeout);
       this.updateInterval && clearInterval(this.updateInterval);
       this.refreshTokenInterval && clearInterval(this.refreshTokenInterval);
+      this.deviceListInterval && clearInterval(this.deviceListInterval);
       callback();
     } catch (e) {
       callback();
