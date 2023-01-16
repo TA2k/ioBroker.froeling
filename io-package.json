@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "froeling",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "news": {
-      "0.0.7": {
+      "0.0.8": {
         "en": "Bugfixes"
       },
       "0.0.4": {

@@ -1,6 +1,6 @@
 {
   "name": "iobroker.froeling",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Adapter for Fröling Connect",
   "author": {
     "name": "TA2k",

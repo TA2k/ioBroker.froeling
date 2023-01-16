@@ -56,8 +56,8 @@ class Froeling extends utils.Adapter {
       this.refreshTokenInterval = setInterval(() => {
         this.login();
       }, 11.5 * 60 * 60 * 1000);
-      this.deviceListInterval = setInterval(() => {
-        this.getDeviceList();
+      this.deviceListInterval = setInterval(async () => {
+        await this.getDeviceList();
       }, 12 * 60 * 60 * 1000);
     }
   }
@@ -111,6 +111,7 @@ class Froeling extends utils.Adapter {
     }
   }
   async getDeviceList() {
+    this.log.debug("Get device list");
     const urlArray = [
       "https://connect-api.froeling.com/app/v1.0/resources/user/getFacilities",
       "https://connect-api.froeling.com/app/v1.0/resources/user/getServiceFacilities",
