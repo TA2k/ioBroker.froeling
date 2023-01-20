@@ -112,6 +112,7 @@ class Froeling extends utils.Adapter {
   }
   async getDeviceList() {
     this.log.debug("Get device list");
+    this.deviceArray = [];
     const urlArray = [
       "https://connect-api.froeling.com/app/v1.0/resources/user/getFacilities",
       "https://connect-api.froeling.com/app/v1.0/resources/user/getServiceFacilities",
@@ -131,7 +132,7 @@ class Froeling extends utils.Adapter {
         .then(async (res) => {
           this.log.debug(JSON.stringify(res.data));
           this.log.info(`${res.data.length} devices found`);
-          this.deviceArray = [];
+
           for (const device of res.data) {
             const id = device.id.toString();
 
