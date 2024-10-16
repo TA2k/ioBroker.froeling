@@ -1,6 +1,6 @@
 {
   "name": "iobroker.froeling",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Adapter for Fröling Connect",
   "author": {
     "name": "TA2k",
@@ -22,27 +22,15 @@
     "url": "https://github.com/TA2k/ioBroker.froeling"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.7",
-    "json-bigint": "^1.0.0",
-    "axios": "^0.27.2"
+    "@iobroker/adapter-core": "^3.2.2",
+    "axios": "^1.7.7",
+    "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "@iobroker/testing": "^4.1.0",
-    "@types/chai": "^4.3.3",
-    "@types/chai-as-promised": "^7.1.5",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.8.3",
-    "@types/proxyquire": "^1.3.28",
-    "@types/sinon": "^10.0.13",
-    "@types/sinon-chai": "^3.2.8",
-    "chai": "^4.3.6",
-    "chai-as-promised": "^7.1.1",
-    "eslint": "^8.25.0",
-    "mocha": "^10.0.0",
-    "proxyquire": "^2.1.3",
-    "sinon": "^14.0.1",
-    "sinon-chai": "^3.7.0",
-    "typescript": "~4.8.4"
+    "@iobroker/testing": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "eslint": "^8.57.1",
+    "typescript": "~5.6.3"
   },
   "main": "main.js",
   "files": [
