@@ -60,7 +60,6 @@
     "keywords": ["fröling connect", "fröling"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "froeling.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.froeling/master/admin/froeling.png",
