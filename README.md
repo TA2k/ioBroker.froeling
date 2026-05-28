@@ -30,6 +30,10 @@ Parameter können geändert werden in dem der "setValue" State beschrieben wird.
 
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.0.6
 
 Bugfixes and added info url for updates
